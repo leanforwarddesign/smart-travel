@@ -1,4 +1,4 @@
-module.exports = {
+const obj = {
     content: [
         "./src/**/*.{html,js,ts,jsx,tsx}",
         "app/**/*.{ts,tsx}",
@@ -82,3 +82,5 @@ module.exports = {
     plugins: [],
     darkMode: ["class"],
 };
+
+export default obj;
