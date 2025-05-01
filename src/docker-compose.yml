@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  back-end:
+    build:
+      context: ./back-end/
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - /app/node_modules
+      - ./back-end:/app
+    environment:
+      - PORT=3001
+    command: npm run dev
+  front-end:
+    build:
+      context: ./front-end/
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:  
+      - /app/node_modules
+      - ./front-end:/app
+    command: npm run dev
