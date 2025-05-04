@@ -1,1 +1,1 @@
-export { FooterByAnima } from "./FooterByAnima";
+export { FooterByAnima } from "./footer";

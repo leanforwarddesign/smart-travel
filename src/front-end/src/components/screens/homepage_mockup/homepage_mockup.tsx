@@ -4,10 +4,10 @@ import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from "../../components/ui/avatar";
-import { Button } from "../../components/ui/button";
-import { FooterByAnima } from "./sections/FooterByAnima";
-import { FrameByAnima } from "./sections/FrameByAnima";
+} from "../../ui/avatar";
+import { Button } from "../../ui/button";
+import { FooterByAnima } from "./sections/footer/index";
+import { FrameByAnima } from "./sections/frame/index";
 
 export const HomepageMockUp = (): JSX.Element => {
     return (

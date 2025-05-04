@@ -8,8 +8,8 @@ import {
     StarIcon,
 } from "lucide-react";
 import React from "react";
-import { Button } from "../../../../components/ui/button";
-import { Card, CardContent } from "../../../../components/ui/card";
+import { Button } from "../../../../ui/button";
+import { Card, CardContent } from "../../../../ui/card";
 
 export const FrameByAnima = (): JSX.Element => {
     // Data for property cards
