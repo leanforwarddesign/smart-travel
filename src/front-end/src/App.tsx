@@ -1,7 +1,12 @@
 import React from "react";
+import { HomepageMockUp } from "./components/screens/homepage_mockup/homepage_mockup";
 
 const App = () => {
-    return (<div><h3>Hello World!</h3></div>);
+    return (
+        <div>
+            <HomepageMockUp />
+        </div>
+    );
 };
 
 export default App;

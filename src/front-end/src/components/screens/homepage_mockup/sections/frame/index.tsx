@@ -1,1 +1,1 @@
-export { FrameByAnima } from "./FrameByAnima";
+export { FrameByAnima } from "./frame";
