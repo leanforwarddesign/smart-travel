@@ -3,6 +3,7 @@ import React from "react";
 import { Badge } from "../../../../ui/badge.tsx";
 import { Button } from "../../../../ui/button.tsx";
 import { Card, CardContent, CardFooter } from "../../../../ui/card.tsx";
+import {Input} from "../../../../ui/input.tsx";
 
 export const FrameByAnima = (): JSX.Element => {
     // Data for city comparisons
@@ -162,9 +163,11 @@ export const FrameByAnima = (): JSX.Element => {
                 <div className="flex flex-col items-start gap-4 flex-1 grow">
                     <div className="flex flex-col h-[184.11px] items-start justify-center gap-4 w-full">
                         <div className="w-full flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-              <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-[#a1a1a1] text-base">
-                SearchIcon country or City
-              </span>
+
+                            <Input type={"text"} placeholder={"Search country or City"} />
+                            <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-[#a1a1a1] text-base">
+                            </span>
+
                             <div className="flex items-center justify-end gap-2.5 flex-1 grow">
                                 <SearchIcon className="w-6 h-6" />
                             </div>
@@ -172,9 +175,7 @@ export const FrameByAnima = (): JSX.Element => {
 
                         <div className="flex flex-wrap h-[40.05px] items-center gap-[8px_8px] w-full">
                             <div className="flex-1 grow flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-                <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-[#a1a1a1] text-base">
-                  Add Budget
-                </span>
+                                <Input type={"number"} placeholder={"Add Budget"} />
                                 <div className="flex items-center justify-end gap-2.5 flex-1 grow">
                                     <DollarSignIcon className="w-6 h-6" />
                                 </div>
@@ -186,18 +187,16 @@ export const FrameByAnima = (): JSX.Element => {
                                 src="https://c.animaapp.com/ma9eugodIUDWMx/img/frame-63.svg"
                             />
                         </div>
-
+                    </div>
                         <div className="flex flex-wrap h-[40.05px] items-center gap-[8px_8px] w-full">
                             <div className="flex-1 grow flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-                <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-[#a1a1a1] text-base">
-                  SearchIcon country or City
-                </span>
+                <Input type={"number"} placeholder={"Search country or City"} />
                                 <div className="flex items-center justify-end gap-2.5 flex-1 grow">
                                     <SearchIcon className="w-6 h-6" />
                                 </div>
                             </div>
                         </div>
-                    </div>
+
 
                     <div className="flex items-start gap-4 w-full">
                         <Button className="flex-1 grow bg-[#c64cff] rounded-lg px-6 py-2">
