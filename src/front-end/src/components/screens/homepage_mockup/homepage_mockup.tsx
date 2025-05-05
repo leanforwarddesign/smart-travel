@@ -1,6 +1,5 @@
 import { MenuIcon } from "lucide-react";
-import React from "react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../ui/button.tsx";
 import { FooterByAnima } from "./sections/footer";
 import { FrameByAnima } from "./sections/frame";
 

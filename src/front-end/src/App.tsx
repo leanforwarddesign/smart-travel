@@ -1,10 +1,9 @@
-import React from "react";
-import { HomepageMockUp } from "./components/screens/homepage_mockup/homepage_mockup";
+import { HomepageMvp } from "./components/screens/homepage_mockup/homepage_mockup";
 
 const App = () => {
     return (
         <div>
-            <HomepageMockUp />
+            <HomepageMvp />
         </div>
     );
 };
