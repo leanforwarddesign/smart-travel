@@ -1,4 +1,3 @@
-import Read from "react";
 import ReactDOMClient from "react-dom/client";
 
 const app = document.getElementById("app");
