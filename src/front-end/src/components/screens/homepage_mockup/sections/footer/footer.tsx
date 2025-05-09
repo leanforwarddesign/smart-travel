@@ -1,4 +1,3 @@
-import React from "react";
 
 export const FooterByAnima = (): JSX.Element => {
     const resourceLinks = [
