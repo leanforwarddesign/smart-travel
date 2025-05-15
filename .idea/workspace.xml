@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ccd0c2f-1e77-4de4-ac0d-e375cc585a4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/front-end/src/components/ui/accordion.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/front-end/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/front-end/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/front-end/src/components/screens/homepage_mockup/sections/frame/frame.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/front-end/src/components/screens/homepage_mockup/sections/frame/frame.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front-end/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/front-end/tailwind.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,26 +33,27 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;toby-non-static-website&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Toby Crust/Documents/GitHub/smart-travel&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "toby-view-more-details",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/Toby Crust/Documents/GitHub/smart-travel",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Toby Crust\Documents\GitHub\smart-travel\src\front-end\src\components\ui" />
       <recent name="C:\Users\Toby Crust\Documents\GitHub\smart-travel\src\front-end" />
       <recent name="C:\Users\Toby Crust\Documents\GitHub\smart-travel\src\front-end\src\components\screens\homepage_mockup\sections" />
     </key>
@@ -56,7 +61,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.26053.12" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
       </set>
     </attachedChunks>
   </component>
@@ -71,6 +76,8 @@
       <workItem from="1746098627763" duration="2746000" />
       <workItem from="1746348279873" duration="1984000" />
       <workItem from="1746443252896" duration="3862000" />
+      <workItem from="1746792464070" duration="158000" />
+      <workItem from="1747297799109" duration="3498000" />
     </task>
     <servers />
   </component>

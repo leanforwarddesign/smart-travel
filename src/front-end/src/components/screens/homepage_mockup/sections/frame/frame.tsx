@@ -4,6 +4,7 @@ import { Badge } from "../../../../ui/badge.tsx";
 import { Button } from "../../../../ui/button.tsx";
 import { Card, CardContent, CardFooter } from "../../../../ui/card.tsx";
 import {Input} from "../../../../ui/input.tsx";
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@radix-ui/react-accordion";
 
 export const FrameByAnima = (): JSX.Element => {
     // Data for city comparisons
@@ -163,7 +164,6 @@ export const FrameByAnima = (): JSX.Element => {
                 <div className="flex flex-col items-start gap-4 flex-1 grow">
                     <div className="flex flex-col h-[184.11px] items-start justify-center gap-4 w-full">
                         <div className="w-full flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-
                             <Input type={"text"} placeholder={"Search country or City"} />
                             <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-[#a1a1a1] text-base">
                             </span>
@@ -381,12 +381,50 @@ export const FrameByAnima = (): JSX.Element => {
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0 w-full flex justify-end">
-                                        <Button
-                                            variant="link"
-                                            className="[font-family:'Geist',Helvetica] font-medium text-black text-base text-center"
-                                        >
-                                            View more details
-                                        </Button>
+                                        <div className="w-full">
+                                            <Accordion type="single" collapsible className="w-full">
+                                                <AccordionItem value="item-1" variant={"link"} className="border-none">
+                                                    <div className="flex justify-end">
+                                                        <AccordionTrigger className="font-bold">
+                                                            view more details
+                                                        </AccordionTrigger>
+                                                    </div>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right">
+                                                            <p className="text-right">
+                                                                🥝 In Auckland (New Zealand)
+                                                            </p>
+                                                            <p>
+                                                                $300/Week
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right">
+                                                            <p className="text-right">
+                                                                🦘 In Sydney (Australia)
+                                                            </p>
+                                                            <p>
+                                                                $200/Week
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right ">
+                                                            <p className="text-right">
+                                                                Housing in Australia Bacon ipsum dolor amet kevin
+                                                                t-bone meatball ham hock andouille pork. Chicken
+                                                                bresaola ribeye, flank filet mignon turducken hamburger.
+                                                                Bresaola cow shankle frankfurter chuck, pork loin
+                                                                pork meatball doner sirloin bacon swine tenderloin
+                                                                kielbasa cupim.
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        </div>
+
                                     </CardFooter>
                                 </Card>
                             ))}
@@ -425,12 +463,49 @@ export const FrameByAnima = (): JSX.Element => {
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0 w-full flex justify-end">
-                                        <Button
-                                            variant="link"
-                                            className="[font-family:'Geist',Helvetica] font-medium text-black text-base text-center"
-                                        >
-                                            View more details
-                                        </Button>
+                                        <div className="w-full">
+                                            <Accordion type="single" collapsible className="w-full">
+                                                <AccordionItem value="item-1" variant={"link"} className="border-none">
+                                                    <div className="flex justify-end">
+                                                        <AccordionTrigger className="font-bold">
+                                                            view more details
+                                                        </AccordionTrigger>
+                                                    </div>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right">
+                                                            <p className="text-right">
+                                                                🥝 In Auckland (New Zealand)
+                                                            </p>
+                                                            <p>
+                                                                $300/Week
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right">
+                                                            <p className="text-right">
+                                                                🦘 In Sydney (Australia)
+                                                            </p>
+                                                            <p>
+                                                                $200/Week
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right ">
+                                                            <p className="text-right">
+                                                                Housing in Australia Bacon ipsum dolor amet kevin
+                                                                t-bone meatball ham hock andouille pork. Chicken
+                                                                bresaola ribeye, flank filet mignon turducken hamburger.
+                                                                Bresaola cow shankle frankfurter chuck, pork loin
+                                                                pork meatball doner sirloin bacon swine tenderloin
+                                                                kielbasa cupim.
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        </div>
                                     </CardFooter>
                                 </Card>
                             ))}
@@ -469,12 +544,49 @@ export const FrameByAnima = (): JSX.Element => {
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0 w-full flex justify-end">
-                                        <Button
-                                            variant="link"
-                                            className="[font-family:'Geist',Helvetica] font-medium text-black text-base text-center"
-                                        >
-                                            View more details
-                                        </Button>
+                                        <div className="w-full">
+                                            <Accordion type="single" collapsible className="w-full">
+                                                <AccordionItem value="item-1" variant={"link"} className="border-none">
+                                                    <div className="flex justify-end">
+                                                        <AccordionTrigger className="font-bold">
+                                                            view more details
+                                                        </AccordionTrigger>
+                                                    </div>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right">
+                                                            <p className="text-right">
+                                                                🥝 In Auckland (New Zealand)
+                                                            </p>
+                                                            <p>
+                                                                $300/Week
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right">
+                                                            <p className="text-right">
+                                                                🦘 In Sydney (Australia)
+                                                            </p>
+                                                            <p>
+                                                                $200/Week
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                    <AccordionContent>
+                                                        <div className="pt-4 pb-2 text-right ">
+                                                            <p className="text-right">
+                                                                Housing in Australia Bacon ipsum dolor amet kevin
+                                                                t-bone meatball ham hock andouille pork. Chicken
+                                                                bresaola ribeye, flank filet mignon turducken hamburger.
+                                                                Bresaola cow shankle frankfurter chuck, pork loin
+                                                                pork meatball doner sirloin bacon swine tenderloin
+                                                                kielbasa cupim.
+                                                            </p>
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        </div>
                                     </CardFooter>
                                 </Card>
                             ))}
