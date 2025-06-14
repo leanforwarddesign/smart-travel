@@ -107,7 +107,7 @@ export const FrameByAnima = (): JSX.Element => {
                     />
                 </div>
 
-                <Card className="flex flex-col max-w-[570px] items-start gap-4 p-10 flex-1 grow ml-[-300px] rounded-[40px] shadow-[4px_4px_8px_#00000040]">
+                <Card className="flex flex-col max-w-[570px] items-start gap-4 p-10 flex-1 grow ml-[-300px] rounded-[40px] bg-white shadow-[4px_4px_8px_#00000040]">
                     <CardContent className="p-0 space-y-4 w-full">
                         <div className="flex items-center justify-center gap-2.5 p-2.5 w-full">
                             <h1 className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-5xl">
