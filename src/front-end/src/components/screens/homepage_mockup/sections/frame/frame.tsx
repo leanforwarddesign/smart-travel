@@ -1,11 +1,147 @@
-import { DollarSignIcon, SearchIcon } from "lucide-react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Badge } from "../../../../ui/badge.tsx";
-import { Button } from "../../../../ui/button.tsx";
+import { Button } from "../../../../ui/Button.tsx";
 import { Card, CardContent, CardFooter } from "../../../../ui/card.tsx";
-import {Input} from "../../../../ui/input.tsx";
+import { DropDown } from "../../../../ui/dropdown/DropDown.tsx";
+import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
+import { loadCurrencyData, loadCostData } from "../../../../../store/currencySlice";
+import { CurrencyInput } from "../../../../ui/CurrencyInput.tsx";
+import { Button as ChakraButton } from "@chakra-ui/react";
 
-export const FrameByAnima = (): JSX.Element => {
+export const FrameByAnima = () => {
+    const dispatch = useAppDispatch();
+    const { graph, costManager } = useAppSelector((state) => state.currency);
+    const [selectedCountry, setSelectedCountry] = useState<string>("");
+    const [selectedRefCountry, setSelectedRefCountry] = useState<string>("");
+    const [countries, setCountries] = useState<Array<{ code: string; country: string; currency: string }>>([]);
+    const [selectedAmount, setSelectedAmount] = useState<number | undefined>("");
+    const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
+    const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+    const [calculationError, setCalculationError] = useState<string>("");
+    const [pppComparison, setPppComparison] = useState<any>(null);
+
+    // Check if all fields are filled
+    const isFormValid = selectedCountry && selectedRefCountry && selectedAmount && Number(selectedAmount) > 0;
+
+    useEffect(() => {
+        // Load currency data when component mounts
+        dispatch(loadCurrencyData('/src/utils/currency-data.json'));
+    }, [dispatch]);
+
+    useEffect(() => {
+        // Load cost of living data
+        if (graph) {
+            dispatch(loadCostData('/src/utils/cost-of-living-data.json'));
+        }
+    }, [graph, dispatch]);
+
+    useEffect(() => {
+        // Update countries list when graph is loaded
+        if (graph) {
+            const countryList = Array.from((graph as any).currencies.entries()).map(
+                ([code, currency]: [string, any]) => ({
+                    code,
+                    country: currency.country,
+                    currency: currency.name
+                })
+            );
+            setCountries(countryList);
+            if (countryList.length > 0 && !selectedCountry) {
+                setSelectedCountry(countryList[0].code);
+            }
+        }
+    }, [graph]);
+
+    const getCountryCodeFromCurrency = (currencyCode: string) => {
+        if (!graph) return null;
+
+        console.log("Graph object:", currencyCode);
+            console.log(graph);
+        console.log("Graph currencies:", (graph as any).currencies);
+        const currencies = (graph as any).currencies;
+        const obj = currencies.get(currencyCode);  
+        console.log("Currency object:", obj);     
+        if (obj) {
+            return obj.country;
+        }
+        return null;
+    };
+
+    const handleCalculate = () => {
+        setCalculationError("");
+        setConvertedAmount(null);
+        setExchangeRate(null);
+        setPppComparison(null);
+
+        if (!graph || !selectedCountry || !selectedRefCountry || !selectedAmount) {
+            setCalculationError("Please fill all fields");
+            return;
+        }
+
+        try {
+            // Convert currency using the graph
+            const amount = Number(selectedAmount);
+            const result = (graph as any).convert(amount, selectedCountry, selectedRefCountry);
+            
+            if (!result) {
+                setCalculationError("Unable to convert between these currencies");
+                return;
+            }
+
+            setConvertedAmount(result.amount);
+            setExchangeRate(result.rate);
+
+            // Calculate PPP if cost data is available
+            console.log("Cost Manager:", costManager);
+            console.log("Selected Country:", selectedCountry);
+            console.log("Selected Reference Country:", selectedRefCountry);
+            const countrCode = getCountryCodeFromCurrency(selectedCountry);
+            const refCountryCode = getCountryCodeFromCurrency(selectedRefCountry);
+            console.log("Country Code:", countrCode);
+            console.log("Reference Country Code:", refCountryCode);
+
+            if (costManager) {
+                const homeCosts = (costManager as any).getCountryCosts(countrCode);
+                const destCosts = (costManager as any).getCountryCosts(refCountryCode);
+                console.log("Home Costs:", homeCosts);
+                console.log("Destination Costs:", destCosts);
+                if (homeCosts && destCosts) {
+                    // Get destination costs in home currency for comparison
+                    const destCostsConverted = (costManager as any).getCountryCostsInCurrency(
+                        refCountryCode,
+                        countrCode,
+                        graph
+                    );
+
+                    console.log("Destination Costs Converted:", destCostsConverted);
+                    if (destCostsConverted) {
+                        // Calculate total cost of living
+                        const homeTotalCost = Object.values(homeCosts.costs).reduce((a: any, b: any) => a + b, 0);
+                        const destTotalCost = Object.values(destCostsConverted.costs).reduce((a: any, b: any) => a + b, 0);
+                        
+                        // Calculate PPP adjustment factor
+                        const pppAdjustment = homeTotalCost / destTotalCost;
+                        
+                        // Calculate purchasing power equivalent
+                        const purchasingPower = result.amount * pppAdjustment;
+
+                        setPppComparison({
+                            nominalAmount: result.amount,
+                            purchasingPowerAmount: purchasingPower,
+                            pppAdjustment: pppAdjustment,
+                            costDifference: ((destTotalCost - homeTotalCost) / homeTotalCost) * 100,
+                            homeCosts: homeTotalCost,
+                            destCosts: destTotalCost
+                        });
+                    }
+                }
+            }
+        } catch (error: any) {
+            setCalculationError(error?.message || "Error performing calculation");
+            console.error("Calculation error:", error);
+        }
+    };
+
     // Data for city comparisons
     const cityComparisons = [
         {
@@ -162,66 +298,140 @@ export const FrameByAnima = (): JSX.Element => {
             <div className="flex items-start gap-10 w-full">
                 <div className="flex flex-col items-start gap-4 flex-1 grow">
                     <div className="flex flex-col h-[184.11px] items-start justify-center gap-4 w-full">
-                        <div className="w-full flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-
-                            <Input type={"text"} placeholder={"Search country or City"} />
-                            <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-[#a1a1a1] text-base">
-                            </span>
-
-                            <div className="flex items-center justify-end gap-2.5 flex-1 grow">
-                                <SearchIcon className="w-6 h-6" />
-                            </div>
-                        </div>
-
-                        <div className="flex flex-wrap h-[40.05px] items-center gap-[8px_8px] w-full">
-                            <div className="flex-1 grow flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-                                <Input type={"number"} placeholder={"Add Budget"} />
-                                <div className="flex items-center justify-end gap-2.5 flex-1 grow">
-                                    <DollarSignIcon className="w-6 h-6" />
-                                </div>
-                            </div>
-
-                            <img
-                                className="w-10 h-10"
-                                alt="Frame"
-                                src="https://c.animaapp.com/ma9eugodIUDWMx/img/frame-63.svg"
+                        <div className="w-full">
+                            <DropDown
+                                options={countries.map(c => ({
+                                    value: c.code,
+                                    label: `${c.country} (${c.code})`
+                                }))}
+                                placeholder="Select country"
+                                value={selectedCountry}
+                                onChange={(value) => setSelectedCountry(value)}
+                                size="lg"
                             />
                         </div>
-                    </div>
-                        <div className="flex flex-wrap h-[40.05px] items-center gap-[8px_8px] w-full">
-                            <div className="flex-1 grow flex items-center gap-2.5 px-2.5 py-2 bg-white border-2 border-solid border-black">
-                <Input type={"number"} placeholder={"Search country or City"} />
-                                <div className="flex items-center justify-end gap-2.5 flex-1 grow">
-                                    <SearchIcon className="w-6 h-6" />
-                                </div>
-                            </div>
-                        </div>
 
+                        <CurrencyInput
+                            value={selectedAmount}
+                            onChange={(e) => setSelectedAmount(e.target.value)}
+                            placeholder="Add Budget"
+                            currency={selectedCountry}
+                            size="lg"
+                        />
+                        
+                        <DropDown
+                                options={countries.map(c => ({
+                                    value: c.code,
+                                    label: `${c.country} (${c.code})`
+                                }))}
+                                placeholder="Select country"
+                                value={selectedRefCountry}
+                                onChange={(value) => setSelectedRefCountry(value)}
+                                size="lg"
+                            />
+                    </div>
 
                     <div className="flex items-start gap-4 w-full">
-                        <Button className="flex-1 grow bg-[#c64cff] rounded-lg px-6 py-2">
-              <span className="[font-family:'Hannari-Regular',Helvetica] font-normal text-white text-base">
-                Calculate
-              </span>
-                        </Button>
+                        <ChakraButton 
+                            bg="#c64cff"
+                            color="white"
+                            _hover={{ bg: "#b03ee6" }}
+                            _disabled={{ bg: "#d9d9d9", cursor: "not-allowed" }}
+                            px={6}
+                            py={2.5}
+                            rounded="2"
+                            width='full'
+                            isDisabled={!isFormValid}
+                            onClick={handleCalculate}
+                        >
+                            Calculate
+                        </ChakraButton>
                     </div>
                 </div>
 
                 <Card className="flex flex-col max-w-[692px] items-start gap-4 p-10 flex-1 grow rounded-[40px] shadow-[4px_4px_8px_#00000040]">
                     <CardContent className="p-0 space-y-4 w-full">
-                        <div className="flex px-0 py-2.5 w-full items-center justify-center gap-2.5">
-                            <h3 className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-2xl text-center">
-                                $100,000 NZD = $150,000 NZD
-                            </h3>
-                        </div>
+                        {calculationError ? (
+                            <div className="flex px-0 py-2.5 w-full items-center justify-center gap-2.5">
+                                <p className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-red-600 text-xl text-center">
+                                    {calculationError}
+                                </p>
+                            </div>
+                        ) : convertedAmount !== null ? (
+                            <>
+                                {pppComparison ? (
+                                    <>
+                                        <div className="flex px-0 py-2.5 w-full items-center justify-center gap-2.5">
+                                            <h3 className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-bold text-[#c64cff] text-3xl text-center">
+                                                💰 {pppComparison.purchasingPowerAmount.toFixed(2)} {selectedRefCountry}
+                                            </h3>
+                                        </div>
 
-                        <div className="flex items-center justify-center gap-2.5 w-full">
-                            <p className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-extralight text-black text-base">
-                                NZD 100,000 equals about AUD 92,000 (as of early 2025). In
-                                Australia, this is close to the median income, and your
-                                take-home pay after tax would be around AUD 70,000–72,000.
-                            </p>
-                        </div>
+                                        <div className="flex items-center justify-center gap-2.5 w-full">
+                                            <p className="flex-1 [font-family:'Geist',Helvetica] font-medium text-black text-lg text-center">
+                                                Purchasing Power in Destination
+                                            </p>
+                                        </div>
+                                        
+                                        <div className="flex items-center justify-center gap-2.5 w-full border-t border-gray-200 pt-4 mt-2">
+                                            <div className="flex-1">
+                                                <p className="[font-family:'Geist',Helvetica] font-extralight text-black text-base mb-3">
+                                                    Your {selectedAmount} {selectedCountry} converts to {convertedAmount.toFixed(2)} {selectedRefCountry} at current exchange rates.
+                                                </p>
+                                                <p className="[font-family:'Geist',Helvetica] font-extralight text-black text-base mb-3">
+                                                    However, based on cost of living differences, your money has the <span className="font-bold">purchasing power</span> of{' '}
+                                                    <span className="font-bold text-[#c64cff]">
+                                                        {pppComparison.purchasingPowerAmount.toFixed(2)} {selectedRefCountry}
+                                                    </span>
+                                                    {' '}when adjusted for local prices.
+                                                </p>
+                                                <p className="[font-family:'Geist',Helvetica] font-extralight text-black text-sm text-center p-3 bg-gray-50 rounded-lg">
+                                                    {pppComparison.costDifference > 0 
+                                                        ? `⚠️ Living costs are ${Math.abs(pppComparison.costDifference).toFixed(1)}% higher in ${selectedRefCountry}`
+                                                        : `🎉 Living costs are ${Math.abs(pppComparison.costDifference).toFixed(1)}% lower in ${selectedRefCountry}!`
+                                                    }
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="flex px-0 py-2.5 w-full items-center justify-center gap-2.5">
+                                            <h3 className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-2xl text-center">
+                                                {selectedAmount} {selectedCountry} = {convertedAmount.toFixed(2)} {selectedRefCountry}
+                                            </h3>
+                                        </div>
+
+                                        <div className="flex items-center justify-center gap-2.5 w-full">
+                                            <p className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-extralight text-black text-base">
+                                                At current exchange rates, {selectedAmount} {selectedCountry} converts to {convertedAmount.toFixed(2)} {selectedRefCountry}.
+                                                {exchangeRate && ` The exchange rate is 1 ${selectedCountry} = ${exchangeRate.toFixed(4)} ${selectedRefCountry}.`}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center justify-center gap-2.5 w-full mt-4 p-3 bg-gray-50 rounded-lg">
+                                            <p className="flex-1 [font-family:'Geist',Helvetica] font-extralight text-gray-600 text-sm text-center">
+                                                ℹ️ Cost of living data not available for purchasing power analysis
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <div className="flex px-0 py-2.5 w-full items-center justify-center gap-2.5">
+                                    <h3 className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-2xl text-center">
+                                        Enter values to see conversion
+                                    </h3>
+                                </div>
+
+                                <div className="flex items-center justify-center gap-2.5 w-full">
+                                    <p className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-extralight text-black text-base">
+                                        Select your home country, enter an amount, choose a destination country, and click Calculate to see the purchasing power comparison.
+                                    </p>
+                                </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
             </div>

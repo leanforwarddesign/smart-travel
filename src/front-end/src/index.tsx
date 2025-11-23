@@ -1,10 +1,13 @@
 import ReactDOMClient from "react-dom/client";
-
-const app = document.getElementById("app");
-const root = ReactDOMClient.createRoot(app);
-
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 import App from "./App.tsx";
 
+const app = document.getElementById("app")!;
+const root = ReactDOMClient.createRoot(app);
+
 root.render(
-    <App />
+    <Provider store={store}>
+        <App />
+    </Provider>
 );
