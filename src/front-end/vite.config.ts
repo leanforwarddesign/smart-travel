@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
     plugins: [react()],
-    publicDir: "./static",
+    publicDir: "./public",
     base: "./",
     css: {
         postcss: {

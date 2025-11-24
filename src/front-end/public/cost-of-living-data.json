@@ -1,0 +1,100 @@
+{
+  "countryCosts": [
+    {
+      "countryCode": "USA",
+      "currency": "USD",
+      "costs": {
+        "food": 50,
+        "transportation": 15,
+        "accommodation": 120,
+        "entertainment": 40,
+        "utilities": 10
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "EU",
+      "currency": "EUR",
+      "costs": {
+        "food": 35,
+        "transportation": 10,
+        "accommodation": 80,
+        "entertainment": 30,
+        "utilities": 8
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "UK",
+      "currency": "GBP",
+      "costs": {
+        "food": 40,
+        "transportation": 12,
+        "accommodation": 100,
+        "entertainment": 35,
+        "utilities": 9
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "Japan",
+      "currency": "JPY",
+      "costs": {
+        "food": 3500,
+        "transportation": 800,
+        "accommodation": 8000,
+        "entertainment": 2500,
+        "utilities": 600
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "Canada",
+      "currency": "CAD",
+      "costs": {
+        "food": 45,
+        "transportation": 12,
+        "accommodation": 110,
+        "entertainment": 35,
+        "utilities": 9
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "Australia",
+      "currency": "AUD",
+      "costs": {
+        "food": 60,
+        "transportation": 18,
+        "accommodation": 130,
+        "entertainment": 45,
+        "utilities": 12
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "Switzerland",
+      "currency": "CHF",
+      "costs": {
+        "food": 70,
+        "transportation": 20,
+        "accommodation": 180,
+        "entertainment": 60,
+        "utilities": 15
+      },
+      "lastUpdated": 1700697600000
+    },
+    {
+      "countryCode": "China",
+      "currency": "CNY",
+      "costs": {
+        "food": 80,
+        "transportation": 20,
+        "accommodation": 200,
+        "entertainment": 60,
+        "utilities": 15
+      },
+      "lastUpdated": 1700697600000
+    }
+  ]
+}

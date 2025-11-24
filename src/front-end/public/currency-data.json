@@ -1,0 +1,114 @@
+{
+  "currencies": [
+    {
+      "code": "USD",
+      "name": "US Dollar",
+      "country": "USA",
+      "decimalPlaces": 2
+    },
+    {
+      "code": "EUR",
+      "name": "Euro",
+      "country": "EU",
+      "decimalPlaces": 2
+    },
+    {
+      "code": "GBP",
+      "name": "British Pound",
+      "country": "UK",
+      "decimalPlaces": 2
+    },
+    {
+      "code": "JPY",
+      "name": "Japanese Yen",
+      "country": "Japan",
+      "decimalPlaces": 0
+    },
+    {
+      "code": "CAD",
+      "name": "Canadian Dollar",
+      "country": "Canada",
+      "decimalPlaces": 2
+    },
+    {
+      "code": "AUD",
+      "name": "Australian Dollar",
+      "country": "Australia",
+      "decimalPlaces": 2
+    },
+    {
+      "code": "CHF",
+      "name": "Swiss Franc",
+      "country": "Switzerland",
+      "decimalPlaces": 2
+    },
+    {
+      "code": "CNY",
+      "name": "Chinese Yuan",
+      "country": "China",
+      "decimalPlaces": 2
+    }
+  ],
+  "exchangeRates": [
+    {
+      "from": "USD",
+      "to": "EUR",
+      "rate": 0.85,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "USD",
+      "to": "GBP",
+      "rate": 0.73,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "USD",
+      "to": "JPY",
+      "rate": 149.50,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "USD",
+      "to": "CAD",
+      "rate": 1.36,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "USD",
+      "to": "AUD",
+      "rate": 1.53,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "USD",
+      "to": "CHF",
+      "rate": 0.88,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "USD",
+      "to": "CNY",
+      "rate": 7.24,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "EUR",
+      "to": "GBP",
+      "rate": 0.86,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "EUR",
+      "to": "JPY",
+      "rate": 175.88,
+      "timestamp": 1700697600000
+    },
+    {
+      "from": "GBP",
+      "to": "JPY",
+      "rate": 204.79,
+      "timestamp": 1700697600000
+    }
+  ]
+}

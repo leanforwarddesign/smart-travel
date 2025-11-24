@@ -27,13 +27,13 @@ export const FrameByAnima = () => {
 
     useEffect(() => {
         // Load currency data when component mounts
-        dispatch(loadCurrencyData('/src/utils/currency-data.json'));
+        dispatch(loadCurrencyData('/currency-data.json'));
     }, [dispatch]);
 
     useEffect(() => {
         // Load cost of living data
         if (graph) {
-            dispatch(loadCostData('/src/utils/cost-of-living-data.json'));
+            dispatch(loadCostData('/cost-of-living-data.json'));
         }
     }, [graph, dispatch]);
 
@@ -56,7 +56,7 @@ export const FrameByAnima = () => {
 
     useEffect(() => {
         // Load city stats data
-        fetch('/src/utils/city-stats-data.json')
+        fetch('/city-stats-data.json')
             .then(response => response.json())
             .then(data => setCityStatsData(data))
             .catch(error => console.error('Error loading city stats:', error));

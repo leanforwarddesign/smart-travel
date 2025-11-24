@@ -20,7 +20,7 @@ const initialState: CurrencyState = {
 // Async thunk to load currency data from JSON
 export const loadCurrencyData = createAsyncThunk(
   'currency/loadData',
-  async (filePath: string = '/src/utils/currency-data.json') => {
+  async (filePath: string = '/currency-data.json') => {
     const response = await fetch(filePath);
     if (!response.ok) {
       throw new Error('Failed to load currency data');
@@ -33,7 +33,7 @@ export const loadCurrencyData = createAsyncThunk(
 // Async thunk to load cost of living data from JSON
 export const loadCostData = createAsyncThunk(
   'currency/loadCostData',
-  async (filePath: string = '/src/utils/cost-of-living-data.json') => {
+  async (filePath: string = '/cost-of-living-data.json') => {
     const response = await fetch(filePath);
     if (!response.ok) {
       throw new Error('Failed to load cost data');
