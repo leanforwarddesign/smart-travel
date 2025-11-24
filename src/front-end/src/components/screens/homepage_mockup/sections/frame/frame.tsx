@@ -19,6 +19,8 @@ export const FrameByAnima = () => {
     const [exchangeRate, setExchangeRate] = useState<number | null>(null);
     const [calculationError, setCalculationError] = useState<string>("");
     const [pppComparison, setPppComparison] = useState<any>(null);
+    const [cityStatsData, setCityStatsData] = useState<any>(null);
+    const [currentCityStats, setCurrentCityStats] = useState<any>(null);
 
     // Check if all fields are filled
     const isFormValid = selectedCountry && selectedRefCountry && selectedAmount && Number(selectedAmount) > 0;
@@ -51,6 +53,64 @@ export const FrameByAnima = () => {
             }
         }
     }, [graph]);
+
+    useEffect(() => {
+        // Load city stats data
+        fetch('/src/utils/city-stats-data.json')
+            .then(response => response.json())
+            .then(data => setCityStatsData(data))
+            .catch(error => console.error('Error loading city stats:', error));
+    }, []);
+
+    useEffect(() => {
+        // Update current city stats when destination country changes
+        if (cityStatsData && selectedRefCountry && graph) {
+            const countryName = getCountryCodeFromCurrency(selectedRefCountry);
+            const stats = cityStatsData.cityStats.find(
+                (stat: any) => stat.countryCode === countryName
+            );
+            
+            if (stats && costManager) {
+                // Get cost data for both countries
+                const homeCostData = (costManager as any).getCountryCosts(getCountryCodeFromCurrency(selectedCountry));
+                const destCostData = (costManager as any).getCountryCosts(countryName);
+                
+                if (homeCostData && destCostData && selectedCountry && selectedRefCountry) {
+                    // Convert destination costs to home currency for display
+                    const destCostsConverted = (costManager as any).getCountryCostsInCurrency(
+                        countryName,
+                        selectedCountry,
+                        graph
+                    );
+
+                    if (destCostsConverted) {
+                        const homeTotalCost = Object.values(homeCostData.costs).reduce((a: any, b: any) => a + b, 0) as number;
+                        const destTotalCost = Object.values(destCostsConverted.costs).reduce((a: any, b: any) => a + b, 0) as number;
+
+                        // Calculate weekly costs (assuming monthly data)
+                        const homeWeeklyCost = (homeTotalCost / 4).toFixed(0);
+                        const destWeeklyCost = (destTotalCost / 4).toFixed(0);
+
+                        setCurrentCityStats({
+                            ...stats,
+                            locations: [
+                                {
+                                    ...stats.locations[0],
+                                    cost: `${selectedCountry} ${homeWeeklyCost}/Week`
+                                },
+                                {
+                                    ...stats.locations[1],
+                                    cost: `${selectedRefCountry} ${destWeeklyCost}/Week`
+                                }
+                            ]
+                        });
+                    }
+                }
+            } else {
+                setCurrentCityStats(stats || null);
+            }
+        }
+    }, [cityStatsData, selectedRefCountry, selectedCountry, costManager, graph]);
 
     const getCountryCodeFromCurrency = (currencyCode: string) => {
         if (!graph) return null;
@@ -109,7 +169,7 @@ export const FrameByAnima = () => {
                     // Get destination costs in home currency for comparison
                     const destCostsConverted = (costManager as any).getCountryCostsInCurrency(
                         refCountryCode,
-                        countrCode,
+                        selectedCountry,
                         graph
                     );
 
@@ -122,12 +182,12 @@ export const FrameByAnima = () => {
                         // Calculate PPP adjustment factor
                         const pppAdjustment = homeTotalCost / destTotalCost;
                         
-                        // Calculate purchasing power equivalent
-                        const purchasingPower = result.amount * pppAdjustment;
+                        // Calculate purchasing power in HOME currency terms
+                        const purchasingPowerInHomeCurrency = Number(selectedAmount) * pppAdjustment;
 
                         setPppComparison({
                             nominalAmount: result.amount,
-                            purchasingPowerAmount: purchasingPower,
+                            purchasingPowerAmount: purchasingPowerInHomeCurrency,
                             pppAdjustment: pppAdjustment,
                             costDifference: ((destTotalCost - homeTotalCost) / homeTotalCost) * 100,
                             homeCosts: homeTotalCost,
@@ -363,13 +423,13 @@ export const FrameByAnima = () => {
                                     <>
                                         <div className="flex px-0 py-2.5 w-full items-center justify-center gap-2.5">
                                             <h3 className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-bold text-[#c64cff] text-3xl text-center">
-                                                💰 {pppComparison.purchasingPowerAmount.toFixed(2)} {selectedRefCountry}
+                                                💰 {pppComparison.purchasingPowerAmount.toFixed(2)} {selectedCountry}
                                             </h3>
                                         </div>
 
                                         <div className="flex items-center justify-center gap-2.5 w-full">
                                             <p className="flex-1 [font-family:'Geist',Helvetica] font-medium text-black text-lg text-center">
-                                                Purchasing Power in Destination
+                                                Equivalent Purchasing Power (in {selectedCountry} terms)
                                             </p>
                                         </div>
                                         
@@ -379,16 +439,16 @@ export const FrameByAnima = () => {
                                                     Your {selectedAmount} {selectedCountry} converts to {convertedAmount.toFixed(2)} {selectedRefCountry} at current exchange rates.
                                                 </p>
                                                 <p className="[font-family:'Geist',Helvetica] font-extralight text-black text-base mb-3">
-                                                    However, based on cost of living differences, your money has the <span className="font-bold">purchasing power</span> of{' '}
+                                                    However, based on cost of living differences, your {selectedAmount} {selectedCountry} has the <span className="font-bold">purchasing power</span> equivalent to{' '}
                                                     <span className="font-bold text-[#c64cff]">
-                                                        {pppComparison.purchasingPowerAmount.toFixed(2)} {selectedRefCountry}
+                                                        {pppComparison.purchasingPowerAmount.toFixed(2)} {selectedCountry}
                                                     </span>
-                                                    {' '}when adjusted for local prices.
+                                                    {' '}when living in {getCountryCodeFromCurrency(selectedRefCountry)}.
                                                 </p>
                                                 <p className="[font-family:'Geist',Helvetica] font-extralight text-black text-sm text-center p-3 bg-gray-50 rounded-lg">
                                                     {pppComparison.costDifference > 0 
-                                                        ? `⚠️ Living costs are ${Math.abs(pppComparison.costDifference).toFixed(1)}% higher in ${selectedRefCountry}`
-                                                        : `🎉 Living costs are ${Math.abs(pppComparison.costDifference).toFixed(1)}% lower in ${selectedRefCountry}!`
+                                                        ? `⚠️ Living costs are ${Math.abs(pppComparison.costDifference).toFixed(1)}% higher in ${getCountryCodeFromCurrency(selectedRefCountry)} - your money goes less far`
+                                                        : `🎉 Living costs are ${Math.abs(pppComparison.costDifference).toFixed(1)}% lower in ${getCountryCodeFromCurrency(selectedRefCountry)} - your money goes further!`
                                                     }
                                                 </p>
                                             </div>
@@ -438,309 +498,60 @@ export const FrameByAnima = () => {
 
             {/* City Stats Section */}
             <div className="flex flex-col items-start gap-10 w-full">
-                <Card className="flex flex-col items-center justify-center gap-4 w-full bg-[#ae53da] rounded-[40px] shadow-[6px_4px_8px_#00000040]">
-                    <CardContent className="p-0 w-full">
-                        <div className="flex items-start gap-4 w-full">
-                            <div className="flex flex-col items-start gap-4 p-10 flex-1 grow rounded-[60px]">
-                                <div className="flex items-start gap-8 w-full">
-                                    <div className="flex flex-col items-start gap-4 flex-1 grow">
-                                        <div className="inline-flex items-center justify-center gap-2.5">
-                                            <h2 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-white text-5xl">
-                                                📈 City stats
-                                            </h2>
-                                        </div>
+                {currentCityStats && (
+                    <Card className="flex flex-col items-center justify-center gap-4 w-full bg-[#ae53da] rounded-[40px] shadow-[6px_4px_8px_#00000040]">
+                        <CardContent className="p-0 w-full">
+                            <div className="flex items-start gap-4 w-full">
+                                <div className="flex flex-col items-start gap-4 p-10 flex-1 grow rounded-[60px]">
+                                    <div className="flex items-start gap-8 w-full">
+                                        <div className="flex flex-col items-start gap-4 flex-1 grow">
+                                            <div className="inline-flex items-center justify-center gap-2.5">
+                                                <h2 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-white text-5xl">
+                                                    📈 City stats
+                                                </h2>
+                                            </div>
 
-                                        <div className="flex flex-col items-start w-full">
                                             <div className="flex flex-col items-start w-full">
-                                                <h3 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-white text-4xl text-center">
-                                                    Overall cost of living
-                                                </h3>
+                                                <div className="flex flex-col items-start w-full">
+                                                    <h3 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-white text-4xl text-center">
+                                                        Overall cost of living
+                                                    </h3>
 
-                                                <div className="flex items-center justify-center gap-2.5 w-full">
-                                                    <p className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-white text-2xl">
-                                                        Estimated costs without rent
-                                                    </p>
+                                                    <div className="flex items-center justify-center gap-2.5 w-full">
+                                                        <p className="flex-1 mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-white text-2xl">
+                                                            Estimated costs without rent
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="flex flex-col items-center justify-center w-full">
-                                            <div className="flex flex-col items-start w-full">
-                                                <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-white text-2xl">
-                                                    🇳 In Auckland (New Zealand)
-                                                </p>
+                                            {currentCityStats.locations.map((location: any, index: number) => (
+                                                <div key={index} className="flex flex-col items-center justify-center w-full">
+                                                    <div className="flex flex-col items-start w-full">
+                                                        <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-white text-2xl">
+                                                            {location.flag} In {location.city} ({location.country})
+                                                        </p>
 
-                                                <p className="[font-family:'Geist',Helvetica] font-normal text-white text-2xl">
-                                                    $NZD 300/Week
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col items-center justify-center w-full">
-                                            <div className="flex flex-col items-start w-full">
-                                                <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-white text-2xl">
-                                                    🇳 In Sydney (Australia)
-                                                </p>
-
-                                                <p className="[font-family:'Geist',Helvetica] font-normal text-white text-2xl">
-                                                    $NZD 200/Week
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col max-w-[920px] items-start gap-4 flex-1 grow">
-                                        <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] text-base">
-                      <span className="font-extralight text-white">
-                        In cities like{" "}
-                      </span>
-
-                                            <span className="font-bold text-white">
-                        Sydney or Melbourne,
-                      </span>
-
-                                            <span className="font-extralight text-white">
-                        {" "}
-                                                this is decent but not extravagant—expect tight budgets
-                        on rent and daily costs.
-                        <br />
-                        <br />
-                        In regional areas or smaller cities like{" "}
-                      </span>
-
-                                            <span className="font-bold text-white">
-                        Adelaide, Hobart, or Perth
-                      </span>
-
-                                            <span className="font-extralight text-white">
-                        , you could live quite comfortably.
-                        <br />
-                        <br />
-                        Australia generally has higher average wages, so while
-                        NZD 100K feels upper-middle class in NZ, it's more of a
-                        comfortable middle-tier income in Australia.
-                        <br />
-                        <br />
-                        To find out further information about cities in
-                        Australia{" "}
-                      </span>
-
-                                            <span className="font-medium text-white underline">
-                        sign up to SMRT | TRVL.{" "}
-                      </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Comparison Cards Section */}
-                <div className="flex flex-col items-start gap-10 w-full">
-                    <div className="flex flex-col items-start gap-8 w-full">
-                        {/* Legend */}
-                        <div className="inline-flex items-center gap-4">
-                            <Badge variant="outline" className="pt-2.5 pb-0 px-2.5">
-                <span className="[font-family:'Geist',Helvetica] font-medium text-black text-xl">
-                  Good ✅
-                </span>
-                            </Badge>
-
-                            <Badge variant="outline" className="pt-2.5 pb-0 px-2.5">
-                <span className="[font-family:'Geist',Helvetica] font-medium text-black text-xl">
-                  Medium 🟧
-                </span>
-                            </Badge>
-
-                            <Badge variant="outline" className="pt-2.5 pb-0 px-2.5">
-                <span className="[font-family:'Geist',Helvetica] font-medium text-black text-xl">
-                  Bad ❌
-                </span>
-                            </Badge>
-                        </div>
-
-                        {/* First row of cards */}
-                        <div className="flex items-center gap-8 w-full">
-                            {comparisonCards.slice(0, 2).map((card, index) => (
-                                <Card
-                                    key={index}
-                                    className={`flex flex-col items-start gap-4 p-10 flex-1 grow bg-white rounded-[40px] border-[6px] border-solid ${card.borderColor} shadow-[4px_4px_8px_#00000040]`}
-                                >
-                                    <CardContent className="p-0 space-y-4 w-full">
-                                        <div className="flex items-center gap-2.5 w-full">
-                                            <h3 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-2xl text-center">
-                                                {card.title}
-                                            </h3>
-                                        </div>
-
-                                        <div className="flex flex-col items-start gap-4 w-full">
-                                            {card.locations.map((location, locIndex) => (
-                                                <div
-                                                    key={locIndex}
-                                                    className="flex flex-col items-center justify-center w-full"
-                                                >
-                                                    <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-black text-base">
-                                                        {location.country}
-                                                    </p>
-                                                    <p className="[font-family:'Geist',Helvetica] font-normal text-black text-base">
-                                                        {location.cost}
-                                                    </p>
+                                                        <p className="[font-family:'Geist',Helvetica] font-normal text-white text-2xl">
+                                                            {location.cost}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
-                                    </CardContent>
-                                    <CardFooter className="p-0 w-full flex justify-end">
-                                        <Button
-                                            variant="link"
-                                            className="[font-family:'Geist',Helvetica] font-medium text-black text-base text-center"
-                                        >
-                                            View more details
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
 
-                        {/* Second row of cards */}
-                        <div className="flex items-center gap-8 w-full">
-                            {comparisonCards.slice(2, 4).map((card, index) => (
-                                <Card
-                                    key={index}
-                                    className={`flex flex-col items-start gap-4 p-10 flex-1 grow bg-white rounded-[40px] border-[6px] border-solid ${card.borderColor} shadow-[4px_4px_8px_#00000040]`}
-                                >
-                                    <CardContent className="p-0 space-y-4 w-full">
-                                        <div className="flex items-center gap-2.5 w-full">
-                                            <h3 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-2xl text-center">
-                                                {card.title}
-                                            </h3>
+                                        <div className="flex flex-col max-w-[920px] items-start gap-4 flex-1 grow">
+                                            <p 
+                                                className="mt-[-1.00px] [font-family:'Geist',Helvetica] text-base"
+                                                dangerouslySetInnerHTML={{ __html: currentCityStats.description.replace(/<br\/>/g, '<br/>').replace(/<strong>/g, '<span class="font-bold text-white">').replace(/<\/strong>/g, '</span>').replace(/class='underline'/g, 'class="font-medium text-white underline"').replace(/<strong class=/g, '<span class=') }}
+                                            />
                                         </div>
-
-                                        <div className="flex items-center justify-center gap-2.5 w-full">
-                                            <div className="flex flex-col items-start gap-4 flex-1 grow">
-                                                {card.locations.map((location, locIndex) => (
-                                                    <div
-                                                        key={locIndex}
-                                                        className="flex flex-col items-center justify-center w-full"
-                                                    >
-                                                        <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-black text-base">
-                                                            {location.country}
-                                                        </p>
-                                                        <p className="[font-family:'Geist',Helvetica] font-normal text-black text-base">
-                                                            {location.cost}
-                                                        </p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter className="p-0 w-full flex justify-end">
-                                        <Button
-                                            variant="link"
-                                            className="[font-family:'Geist',Helvetica] font-medium text-black text-base text-center"
-                                        >
-                                            View more details
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-
-                        {/* Third row of cards */}
-                        <div className="flex items-start gap-8 w-full">
-                            {comparisonCards.slice(4, 7).map((card, index) => (
-                                <Card
-                                    key={index}
-                                    className={`flex flex-col items-start gap-4 p-10 flex-1 grow bg-white rounded-[40px] border-[6px] border-solid ${card.borderColor} shadow-[4px_4px_8px_#00000040]`}
-                                >
-                                    <CardContent className="p-0 space-y-4 w-full">
-                                        <div className="flex items-center gap-2.5 w-full">
-                                            <h3 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-2xl text-center">
-                                                {card.title}
-                                            </h3>
-                                        </div>
-
-                                        <div className="flex items-center justify-center gap-2.5 w-full">
-                                            <div className="flex flex-col items-start gap-4 flex-1 grow">
-                                                {card.locations.map((location, locIndex) => (
-                                                    <div
-                                                        key={locIndex}
-                                                        className="flex flex-col items-center justify-center w-full"
-                                                    >
-                                                        <p className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-normal text-black text-base">
-                                                            {location.country}
-                                                        </p>
-                                                        <p className="[font-family:'Geist',Helvetica] font-normal text-black text-base">
-                                                            {location.cost}
-                                                        </p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter className="p-0 w-full flex justify-end">
-                                        <Button
-                                            variant="link"
-                                            className="[font-family:'Geist',Helvetica] font-medium text-black text-base text-center"
-                                        >
-                                            View more details
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Overall Ranking */}
-            <div className="inline-flex pl-0 pr-2.5 pt-2.5 pb-0 items-center justify-center gap-2.5">
-                <h2 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-4xl">
-                    Overall ranking: 6/68
-                </h2>
-            </div>
-
-            {/* City Comparison */}
-            <div className="flex flex-col items-start gap-4 w-full">
-                <h2 className="mt-[-1.00px] [font-family:'Geist',Helvetica] font-medium text-black text-[32px]">
-                    Comparison across other cities in Australia
-                </h2>
-
-                <div className="flex items-center gap-8 w-full">
-                    {cityComparisons.map((city, index) => (
-                        <Card
-                            key={index}
-                            className="flex flex-col items-start gap-4 p-4 flex-1 grow bg-white rounded-lg border border-solid border-[#d9d9d9]"
-                        >
-                            <CardContent className="p-0 w-full">
-                                <div
-                                    className="w-full h-[247px] bg-cover bg-center bg-image-placeholder"
-                                    style={{ backgroundImage: `url(${city.imageUrl})` }}
-                                />
-
-                                <div className="flex flex-col w-52 items-start gap-2 mt-4">
-                                    <div className="flex items-start w-full">
-                                        <p className="flex-1 mt-[-1.00px] font-body-base font-[number:var(--body-base-font-weight)] text-[#1e1e1e] text-[length:var(--body-base-font-size)] tracking-[var(--body-base-letter-spacing)] leading-[var(--body-base-line-height)]">
-                                            {city.name}
-                                        </p>
-                                    </div>
-
-                                    <div className="inline-flex items-start">
-                                        <p className="text-[#1e1e1e] mt-[-1.00px] font-body-strong font-[number:var(--body-strong-font-weight)] text-[length:var(--body-strong-font-size)] tracking-[var(--body-strong-letter-spacing)] leading-[var(--body-strong-line-height)] whitespace-nowrap">
-                                            {city.cost}
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-start w-full">
-                                        <p className="mt-[-1.00px] font-body-small font-[number:var(--body-small-font-weight)] text-[#757575] text-[length:var(--body-small-font-size)] tracking-[var(--body-small-letter-spacing)] leading-[var(--body-small-line-height)] whitespace-nowrap">
-                                            {city.suburb}
-                                        </p>
                                     </div>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
         </section>
     );

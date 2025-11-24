@@ -1,0 +1,148 @@
+{
+  "cityStats": [
+    {
+      "countryCode": "Australia",
+      "description": "In cities like <strong>Sydney or Melbourne,</strong> this is decent but not extravagant—expect tight budgets on rent and daily costs.<br/><br/>In regional areas or smaller cities like <strong>Adelaide, Hobart, or Perth</strong>, you could live quite comfortably.<br/><br/>Australia generally has higher average wages, so while NZD 100K feels upper-middle class in NZ, it's more of a comfortable middle-tier income in Australia.<br/><br/>To find out further information about cities in Australia <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "Sydney",
+          "country": "Australia",
+          "flag": "🇦🇺",
+          "cost": "$200/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "USA",
+      "description": "In major metropolitan areas like <strong>New York City or San Francisco,</strong> living costs are among the highest in the world, requiring substantial income for comfortable living.<br/><br/>Mid-sized cities like <strong>Austin, Denver, or Seattle</strong> offer a better balance of opportunity and affordability.<br/><br/>The USA has significant regional cost variations, with Southern and Midwest states generally being more affordable than coastal areas.<br/><br/>To find out further information about cities in the USA <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "New York",
+          "country": "USA",
+          "flag": "🇺🇸",
+          "cost": "$400/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "UK",
+      "description": "In <strong>London,</strong> costs are significantly higher than the rest of the UK, with rent being a major expense.<br/><br/>Cities like <strong>Manchester, Birmingham, or Edinburgh</strong> offer good quality of life at lower costs while still providing excellent amenities.<br/><br/>The UK's cost of living varies greatly between London and other regions, with the capital typically 30-50% more expensive.<br/><br/>To find out further information about cities in the UK <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "London",
+          "country": "United Kingdom",
+          "flag": "🇬🇧",
+          "cost": "$350/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "Japan",
+      "description": "In <strong>Tokyo,</strong> costs are high but balanced by excellent public services and infrastructure.<br/><br/>Cities like <strong>Osaka, Kyoto, or Fukuoka</strong> offer similar quality of life at 20-30% lower costs.<br/><br/>Japan offers excellent value in healthcare and transportation, though imported goods can be expensive.<br/><br/>To find out further information about cities in Japan <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "Tokyo",
+          "country": "Japan",
+          "flag": "🇯🇵",
+          "cost": "¥35,000/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "Canada",
+      "description": "In cities like <strong>Toronto or Vancouver,</strong> housing costs have surged in recent years, making them among the most expensive in North America.<br/><br/>Cities like <strong>Montreal, Calgary, or Ottawa</strong> offer more affordable living while maintaining high quality of life.<br/><br/>Canada offers excellent public services and healthcare, with costs varying significantly by province.<br/><br/>To find out further information about cities in Canada <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "Toronto",
+          "country": "Canada",
+          "flag": "🇨🇦",
+          "cost": "$320/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "Switzerland",
+      "description": "In cities like <strong>Zurich or Geneva,</strong> costs are among the highest globally, but salaries are proportionally higher.<br/><br/>Smaller cities like <strong>Bern, Lausanne, or Basel</strong> offer slightly lower costs while maintaining Switzerland's high quality of life.<br/><br/>Switzerland's high costs are offset by excellent infrastructure, healthcare, and safety, plus lower tax rates in some cantons.<br/><br/>To find out further information about cities in Switzerland <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "Zurich",
+          "country": "Switzerland",
+          "flag": "🇨🇭",
+          "cost": "CHF 450/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "China",
+      "description": "In <strong>Beijing or Shanghai,</strong> costs for expats can be high, especially for Western-style accommodation and imported goods.<br/><br/>Second-tier cities like <strong>Chengdu, Hangzhou, or Xi'an</strong> offer excellent quality of life at much lower costs.<br/><br/>China offers great value for local food, transportation, and services, though international products are expensive.<br/><br/>To find out further information about cities in China <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "Shanghai",
+          "country": "China",
+          "flag": "🇨🇳",
+          "cost": "¥800/Week"
+        }
+      ]
+    },
+    {
+      "countryCode": "EU",
+      "description": "In major cities like <strong>Paris, Amsterdam, or Munich,</strong> costs are high but generally lower than London or Zurich.<br/><br/>Southern and Eastern European cities like <strong>Lisbon, Barcelona, or Prague</strong> offer excellent value with lower costs.<br/><br/>The Eurozone offers great mobility and healthcare, with significant cost variations between north and south.<br/><br/>To find out further information about cities in Europe <strong class='underline'>sign up to SMRT | TRVL.</strong>",
+      "locations": [
+        {
+          "city": "Auckland",
+          "country": "New Zealand",
+          "flag": "🇳🇿",
+          "cost": "$300/Week"
+        },
+        {
+          "city": "Berlin",
+          "country": "Germany",
+          "flag": "🇪🇺",
+          "cost": "€250/Week"
+        }
+      ]
+    }
+  ]
+}

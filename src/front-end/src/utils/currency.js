@@ -67,35 +67,27 @@ class CurrencyGraph {
 
   // Find exchange rate path using BFS (Breadth-First Search)
   findExchangePath(fromCode, toCode) {
+    console.log(`Finding exchange path from ${fromCode} to ${toCode}`);
     if (fromCode === toCode) return { rate: 1, path: [fromCode] };
 
     const queue = [{ code: fromCode, rate: 1, path: [fromCode] }];
     const visited = new Set([fromCode]);
 
-    while (queue.length > 0) {
-      const { code, rate, path } = queue.shift();
-
-      const edges = this.adjacencyList.get(code) || [];
-      for (const edge of edges) {
-        if (edge.to === toCode) {
-          return {
-            rate: rate * edge.rate,
-            path: [...path, edge.to]
-          };
-        }
-
-        if (!visited.has(edge.to)) {
-          visited.add(edge.to);
-          queue.push({
-            code: edge.to,
-            rate: rate * edge.rate,
-            path: [...path, edge.to]
-          });
-        }
-      }
+    const adjacencyList = this.adjacencyList.get(fromCode);
+    console.log("Adjacency List:", adjacencyList);
+    if (!adjacencyList) {
+      return null;
     }
-
-    return null; // No path found
+    // for easier access in inner function
+    const edge = adjacencyList.find((edge) => edge.to === toCode);
+    console.log("Direct edge found:", edge);
+    if (!edge) {
+      return null;
+    } 
+      return {
+        rate: edge.rate,
+        path: [fromCode, toCode]
+      };
   }
 
   convert(amount, fromCode, toCode) {
